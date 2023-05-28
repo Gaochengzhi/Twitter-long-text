@@ -1,0 +1,62 @@
+.ql-editor {
+    min-height: 150px !important;
+}
+
+.editIcon {
+    padding-top: 1em;
+}
+
+.ql-formats,
+.ql-picker-options .ql-picker-item,
+.notification {
+    z-index: 999;
+}
+
+.ql-toolbar {
+    background-color: white;
+    z-index: 995;
+}
+
+.close-button,
+.upload-button {
+    cursor: pointer;
+    font-size: small;
+}
+
+.upload-button {
+    background: rgb(29, 155, 240);
+    color: white;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-radius: 3px;
+}
+
+.notification {
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    transform: translate(-5%, -50%);
+    background-color: rgb(29, 155, 240);
+    border: 1px solid #ccc;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: Sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.9s;
+    z-index: 9999;
+}
+
+.notification.show,
+.show {
+    animation: fadeIn 200ms forwards;
+    display: block;
+}
+
+.notification.fadeout,
+.hide {
+    animation: fadeOut 200ms forwards;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}

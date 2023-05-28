@@ -1,33 +1,41 @@
 {
-  "manifest_version": 3,
-  "name": "Twitter Long Text",
-  "version": "0.1.0",
-  "description": "My Chrome Extension",
-  "icons": {
-    "16": "icons/icon_16.png",
-    "32": "icons/icon_32.png",
-    "48": "icons/icon_48.png",
-    "128": "icons/icon_128.png"
-  },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "action": {
-    "default_title": "Twitter Long Text",
-    "default_popup": "popup.html"
-  },
-  "permissions": [
-    "storage"
-  ],
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "run_at": "document_idle",
-      "js": [
-        "contentScript.js"
-      ]
-    }
-  ]
+    "manifest_version": 3,
+    "name": "Twitter Long Text",
+    "version": "0.1.0",
+    "description": "My Chrome Extension",
+    "icons": {
+        "16": "icons/icon_128.png",
+        "32": "icons/icon_128.png",
+        "48": "icons/icon_128.png",
+        "128": "icons/icon_128.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "Twitter Long Text",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "webNavigation",
+        "activeTab",
+        "webRequest",
+        "tabs",
+        "https://twitter.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://twitter.com/*"
+            ],
+            "js": [
+                "quill/quill.min.js",
+                "contentScript.js"
+            ],
+            "css": [
+                "quill/quill.snow.css",
+                "main.css"
+            ]
+        }
+    ]
 }

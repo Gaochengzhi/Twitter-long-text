@@ -20,5 +20,8 @@
     "webpack": "^5.84.1",
     "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.9.0"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.11"
   }
 }
