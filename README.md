@@ -15,10 +15,12 @@ Twitter Long Text Editor is a powerful Chrome extension that convert the input l
 - Powerful rich text editing function.
 - One-click to write long text and copy the image to clipboard.
 
+![demo](./assets/demo.gif)
+
 ## Install
 
 1. Directly from Chorme extension store (not yet)
-2. Download the release zip package and install manually 
+2. Download the release zip [package](https://github.com/Gaochengzhi/Twitter-long-text/releases) and install manually 
 
 
 
