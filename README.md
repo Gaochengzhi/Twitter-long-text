@@ -34,7 +34,7 @@ Rich text editor is supported by [Quilljs](https://quilljs.com/) and text conver
 
 ## Contact me
 
-Twitter: https://twitter.com/home
+Twitter: https://twitter.com/jiangha
 
 Email: Gaochengzhi1999@gmail.com
 
