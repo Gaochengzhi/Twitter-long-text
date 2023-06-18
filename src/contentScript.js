@@ -80,14 +80,14 @@ function initQuillEditor(path) {
     let quill = new Quill('#quill-editor', quillConfig);
 
     let toolbar = document.querySelector('.ql-toolbar');
-    toolbar.addEventListener('click', function(event) {
+    toolbar.addEventListener('click', function (event) {
         event.stopPropagation();
     });
 
     // Make textarea initially not visible and stop event propagation on input.
     let textarea = document.querySelector('div.DraftEditor-root');
     textarea.style.display = 'none';
-    textarea.addEventListener('input', function(event) {
+    textarea.addEventListener('input', function (event) {
         event.stopPropagation();
     });
 
@@ -98,7 +98,7 @@ function initQuillEditor(path) {
     uploadButton.style.position = 'inline-block';
     toolbar.appendChild(uploadButton);
 
-    uploadButton.addEventListener('click', function() {
+    uploadButton.addEventListener('click', function () {
         uploadClickHandler(editorContainer, quill, path);
     });
 }
@@ -121,18 +121,18 @@ const quillConfig = {
 function uploadClickHandler(editorContainer, quill, path) {
     let htmlContent = editorContainer;
     toBlob(htmlContent)
-        .then(function(bblob) {
+        .then(function (bblob) {
             let file = new File([bblob], 'my-node.png', { type: 'image/png' });
             navigator.clipboard.write([
                 new ClipboardItem({
                     'image/png': file
                 })
-            ]).then(function() {
+            ]).then(function () {
                 successNotification();
                 clearQuillEditor(quill);
                 hideQuillEditor(path);
                 showPen = !showPen;
-            }).catch(function(error) {
+            }).catch(function (error) {
                 console.error("Error: ", error);
             });
         });
@@ -146,9 +146,9 @@ function successNotification() {
 
     // Animate the notification
     notification.classList.add('show');
-    setTimeout(function() {
+    setTimeout(function () {
         notification.classList.add('fadeout');
-        setTimeout(function() {
+        setTimeout(function () {
             // Remove the notification element
             document.body.removeChild(notification);
         }, 300);
@@ -164,7 +164,9 @@ function checkForToolbarDiv() {
     if (toolbarDiv) {
         insertIcon();
     }
-    else { setTimeout(checkForToolbarDiv, 100); }
+    else { // Only start a new initialization if one isn't already in progress
+        setTimeout(checkForToolbarDiv, 100);
+    }
 }
 
 
@@ -176,8 +178,8 @@ setTimeout(() => {
         console.log(count1);
         checkForToolbarDiv();
     }
-}, 1500);
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+}, 1000);
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.message === 'urlChanged') {
         if (request.initialLoad) {
             // never going here

@@ -60,3 +60,8 @@
     animation-fill-mode: forwards;
     opacity: 0;
 }
+
+div#quill-editor {
+    background: rgb(255, 255, 254);
+
+}
