@@ -6,19 +6,21 @@ let toolbarDiv = null;
 let editorIcon = null;
 let path = null;
 let firstTimeClick = true;
-let count1 = 0
-let count2 = 0
+let newTwitte = false
+
+if (document.getElementById("new-tweet-container")) {
+    newTwitte = true
+}
 
 
 function checkIfIconExists() {
-    // Replace this with your own logic to check for the existence of the icon
     let icon = document.querySelector('.editIcon');
     return icon !== null;
 }
 
 function insertIcon() {
     editorIcon = document.createElement('div');
-    editorIcon.className = 'close-button ql-formats editIcon';
+    editorIcon.className = newTwitte ? 'close-button ql-formats editIcon newTwitterIcon' : 'close-button ql-formats editIcon';
 
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", "0 0 20 20");
@@ -32,12 +34,14 @@ function insertIcon() {
     svg.appendChild(path);
     editorIcon.appendChild(svg);
     editorIcon.style.position = 'inline-block';
-
-    let firstChild = toolbarDiv.firstElementChild;
-    toolbarDiv.insertBefore(editorIcon, firstChild);
+    if (newTwitte) {
+        // editorIcon has css that to be right align
+        toolbarDiv.appendChild(editorIcon);
+    } else {
+        let firstChild = toolbarDiv.firstElementChild;
+        toolbarDiv.insertBefore(editorIcon, firstChild);
+    }
     editorIcon.addEventListener('click', iconClickHandler);
-
-
 }
 
 function iconClickHandler() {
@@ -69,12 +73,23 @@ function hideQuillEditor(path) {
 
 // This function initializes the Quill editor and manipulates the toolbar and textarea.
 function initQuillEditor(path) {
-    let draftEditorRoot = document.querySelector('div.DraftEditor-root');
+
+    let anchorDiv = newTwitte ? "#new-tweet-text" : 'div.DraftEditor-root'
+    let draftEditorRoot = document.querySelector(anchorDiv);
     let editorContainer = document.createElement('div');
     editorContainer.id = 'quill-editor';
-
-    if (draftEditorRoot) draftEditorRoot.style.display = 'none';
-    draftEditorRoot.parentNode.insertBefore(editorContainer, draftEditorRoot.parentNode.nextSibling);
+    editorContainer.addEventListener('keydown', function (event) {
+        event.stopPropagation();
+    });
+    if (draftEditorRoot) {
+        if (newTwitte) {
+            // draftEditorRoot.style.display = 'hidden';
+            draftEditorRoot.parentNode.appendChild(editorContainer);
+        } else {
+            draftEditorRoot.style.display = 'none';
+            draftEditorRoot.parentNode.insertBefore(editorContainer, draftEditorRoot.parentNode.nextSibling);
+        }
+    }
 
     // Initialize Quill editor with configurations
     let quill = new Quill('#quill-editor', quillConfig);
@@ -85,11 +100,15 @@ function initQuillEditor(path) {
     });
 
     // Make textarea initially not visible and stop event propagation on input.
-    let textarea = document.querySelector('div.DraftEditor-root');
-    textarea.style.display = 'none';
-    textarea.addEventListener('input', function (event) {
-        event.stopPropagation();
-    });
+    let textarea = document.querySelector(anchorDiv);
+    if (newTwitte) {
+        textarea.style.display = 'hidden';
+    } else {
+        textarea.style.display = 'none';
+        textarea.addEventListener('input', function (event) {
+            event.stopPropagation();
+        });
+    }
 
     // Create upload button and add it to toolbar
     let uploadButton = document.createElement('div');
@@ -141,7 +160,7 @@ function uploadClickHandler(editorContainer, quill, path) {
 function successNotification() {
     let notification = document.createElement('div');
     notification.className = 'notification';
-    notification.textContent = 'Image copied!';
+    notification.textContent = 'Image copied! ctr-c to tweet!';
     document.body.appendChild(notification);
 
     // Animate the notification
@@ -159,13 +178,16 @@ function clearQuillEditor(quill) {
     quill.setContents([{ insert: '\n' }]);
 }
 
-function checkForToolbarDiv() {
+function checkForInsertIconInToolbar() {
     toolbarDiv = document.querySelector('div[data-testid="toolBar"]');
+    if (newTwitte) {
+        toolbarDiv = document.querySelector('#new-tweet');
+    }
     if (toolbarDiv) {
         insertIcon();
     }
     else { // Only start a new initialization if one isn't already in progress
-        setTimeout(checkForToolbarDiv, 100);
+        setTimeout(checkForInsertIconInToolbar, 100);
     }
 }
 
@@ -175,22 +197,19 @@ function checkForToolbarDiv() {
 setTimeout(() => {
     if (!checkIfIconExists()) {
         firstTimeClick = true;
-        console.log(count1);
-        checkForToolbarDiv();
+        checkForInsertIconInToolbar();
     }
 }, 1000);
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.message === 'urlChanged') {
         if (request.initialLoad) {
-            // never going here
             // alert("initial load")
         } else {
             // Page is refreshed or navigated to a new URL
             if (request.url === 'https://twitter.com/home') {
                 if (!checkIfIconExists()) {
                     firstTimeClick = true;
-                    console.log(count2);
-                    checkForToolbarDiv();
+                    checkForInsertIconInToolbar();
                 }
             }
         }
@@ -199,11 +218,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 
 
-// Add event listener to the element
-setTimeout(() => {
-    const tweetButton = document.querySelector('[data-testid="tweetButtonInline"][role="button"]');
-    tweetButton.addEventListener('click', handleClick);
-}, 3000);
+// Add event listener to the handle the click
+if (newTwitte) {
+
+} else {
+    setTimeout(() => {
+        const tweetButton = document.querySelector('[data-testid="tweetButtonInline"][role="button"]');
+        tweetButton.addEventListener('click', handleClick);
+    }, 3000);
+}
 
 
 function handleClick() {
@@ -212,8 +235,7 @@ function handleClick() {
         if (draftEditorRoot) {
             if (!checkIfIconExists()) {
                 firstTimeClick = true;
-                console.log(count2);
-                checkForToolbarDiv();
+                checkForInsertIconInToolbar();
             }
         }
         else {

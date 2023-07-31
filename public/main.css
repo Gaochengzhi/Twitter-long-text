@@ -6,6 +6,10 @@
     padding-top: 1em;
 }
 
+.newTwitterIcon {
+    display: inline-flex;
+}
+
 .ql-formats,
 .ql-picker-options .ql-picker-item,
 .notification {

@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Twitter Long Text Editor",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Twitter Long Text Editor converts the input Rich Long Text into an image and directly write to the clipboard",
     "icons": {
         "16": "icons/icon_128.png",
